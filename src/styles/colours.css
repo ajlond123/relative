@@ -1,0 +1,14 @@
+:root {
+    --green: #55BD00;
+    --blue: #0070E6;
+    --black: #3B3B3B;
+    --slate: #888888;
+    --light-grey: #F8F8F8;
+    --mid-grey: #E0E0E0;
+    --dark-grey: #B5B5B5;
+    --white: #FFFFFF;
+
+    /* Other colours taken from Figma inspect */
+    --canvas: #C4C4C4;
+    --panel-backdrop: #EFEFEF;
+}
