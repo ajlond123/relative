@@ -16,7 +16,7 @@ export default {
 <style scoped>
     .header {
         display: flex;
-        height: 50px;
+        height: var(--headerHeight);
         align-content: center;
         align-items: center;
         background: var(--white);

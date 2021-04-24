@@ -1,6 +1,6 @@
 <template>
-    <div class="page">
-        <div class="page__canvas">
+    <div class="document">
+        <div class="document__canvas">
 
         </div>
     </div>
@@ -8,12 +8,12 @@
 
 <script>
 export default {
-    name: "Page"
+    name: "Document"
 }
 </script>
 
 <style scoped>
-    .page {
+    .document {
         display: flex;
         align-content: center;
         justify-content: center;
@@ -21,7 +21,7 @@ export default {
         background: var(--panel-backdrop);
     }
 
-    .page__canvas {
+    .document__canvas {
         background: var(--canvas);
         width: 100%;
         max-width: 521px;

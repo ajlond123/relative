@@ -1,11 +1,11 @@
 <template>
     <div id="app">
         <Header />
-        <main class="container" :style="{ height: deviceHeight }">
+        <main class="container">
             <Sidebar position="left">
-                <PageEditor />
+                <PageManager />
             </Sidebar>
-            <Page />
+            <Document />
             <Sidebar position="right">
                 <Configurator />
             </Sidebar>
@@ -17,36 +17,19 @@
 
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
-import Page from "@/components/Page";
-import PageEditor from "@/components/PageEditor";
+import Document from "@/components/Document";
+import PageManager from "@/components/PageManager";
 import Configurator from "@/components/Configurator";
 
 export default {
     name: 'App',
     components: {
         Configurator,
-        PageEditor,
-        Page,
+        PageManager,
+        Document,
         Sidebar,
         Header,
     },
-    data() {
-        return {
-            deviceHeight: '',
-        };
-    },
-    methods: {
-        setFrameHeight() {
-            if (window.innerHeight) {
-                return `${(window.innerHeight - 50)}px` // frame height - header height
-            }
-
-            return '100vh'
-        }
-    },
-    mounted() {
-        this.deviceHeight = this.setFrameHeight();
-    }
 }
 </script>
 
@@ -58,5 +41,6 @@ export default {
     display: grid;
     grid-template-columns: 246px auto 246px;
     width: 100%;
+    height: calc(100vh - var(--headerHeight));
 }
 </style>
