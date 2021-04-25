@@ -20,7 +20,7 @@ export default {
         align-content: center;
         align-items: center;
         background: var(--white);
-        padding: 0 16px;
+        padding: 0 var(--defaultSpacing);
         border-bottom: 1px solid var(--mid-grey);
     }
 </style>

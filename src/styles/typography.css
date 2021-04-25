@@ -1,4 +1,4 @@
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, p, span {
     font-family: "Graphik", sans-serif;
     margin: 0;
     padding: 0;
@@ -12,3 +12,10 @@ h1, h2, h3, h4, h5, h6 {
 .heading--sm {
     font-size: 14px;
 }
+
+.text {
+    font-size: 12px;
+    color: var(--black);
+}
+
+

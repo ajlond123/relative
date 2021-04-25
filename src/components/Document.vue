@@ -18,7 +18,7 @@ export default {
         align-content: center;
         justify-content: center;
         align-items: center;
-        background: var(--panel-backdrop);
+        background: var(--light-grey);
     }
 
     .document__canvas {
