@@ -1,197 +1,193 @@
 <template>
   <div class="page-manager">
-      <div class="page-manager__header">
+      <header class="page-manager__header">
           <Checkbox
               label="Export all"
               @checked="exportAll"
           />
-      </div>
+      </header>
 
       <div class="page-manager__pages">
-          <ul ref="pages">
-              <li
-                  v-for="(page, index) in orderedPages"
-                  :key="page.index"
-                  class="page"
-                  draggable="true"
-                  @dragstart="onDragstart($event, page)"
-                  @dragend="onDragend($event)"
-                  @drag="onDrag($event)"
-                  @dragover.prevent
-                  @dragenter.prevent
-                  @drop="onDrop($event, page)"
+          <ul>
+              <draggable
+                  v-model="pages"
+                  ghost-class="page--ghost"
+                  chosen-class="page--chosen"
+                  drag-class="page--drag"
               >
-                  <Checkbox @checked="selectPage" />
-                  <div class="page__box" />
-                  <p class="text">{{ title(index, page.title) }}</p>
-              </li>
+                  <li
+                      v-for="(page, index) in pages"
+                      :key="page.index"
+                      class="page"
+                  >
+                      <div class="page__inner">
+                          <Checkbox
+                              @checked="selectPage(page, $event)"
+                              :checked="page.checked"
+                          />
+                          <div class="page__box" />
+                          <p class="text">{{ title(index, page.title) }}</p>
+                      </div>
+                  </li>
+              </draggable>
           </ul>
-
-          <ul class="cloned-pages" ref="clones" />
       </div>
+
+      <footer class="page-manager__footer">
+          <p class="text">
+              <strong>Page numbers</strong>
+          </p>
+          <svg width="26" height="16" viewBox="0 0 26 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect y="5" width="26" height="6" rx="3" fill="#E2E2E2"/>
+              <circle cx="18" cy="8" r="7.5" fill="#55BD00" stroke="white"/>
+          </svg>
+      </footer>
   </div>
 </template>
 
 <script>
-import orderBy from 'lodash/orderBy';
+import draggable from 'vuedraggable';
+
 import Checkbox from "@/components/Checkbox";
 
 export default {
     name: "PageManager",
-    components: {Checkbox},
+    components: {
+        draggable,
+        Checkbox
+    },
     data() {
         return {
-            draggedItem: null,
+            allPagesSelected: false,
             pages: [
                 {
                     title: 'Friends',
                     index: 1,
+                    checked: false,
                 },
                 {
                     title: 'Spoken interjections',
                     index: 2,
+                    checked: false,
                 },
                 {
                     title: 'Exaggeration',
                     index: 3,
+                    checked: false,
                 },
                 {
                     title: 'First / second person',
                     index: 4,
+                    checked: false,
                 },
                 {
                     title: 'Do what you love',
                     index: 5,
+                    checked: false,
                 },
                 {
                     title: 'No food guilt',
                     index: 6,
+                    checked: false,
                 },
             ],
         };
-    },
-    computed: {
-        orderedPages() {
-            return orderBy(this.pages, 'index');
-        },
-    },
-    mounted() {
-        this.createClones();
     },
     methods: {
         title(index, title) {
             return `${index + 1}. ${title}`;
         },
-        isDragged(page) {
-            return this.draggedItem === page;
-        },
-        onDragstart(event, page) {
-            event.dataTransfer.effectAllowed = 'move';
-            this.draggedItem = page;
-        },
-        onDragend(event) {
-            event.target.style.opacity = '1';
-            event.target.classList.remove('is-dragged');
-            this.draggedItem = null;
-        },
-        onDrop(event, page) {
-            const tempIndex = page.index;
-            page.index = this.draggedItem.index;
-            this.draggedItem.index = tempIndex
-        },
-        onDrag(event) {
-            console.log(event);
-        },
-        exportAll(event) {
-            console.log('export all', event.$event.target.checked);
-        },
-        selectPage(event) {
-            console.log('select page', event.$event.target.checked);
-        },
-        generateKey(index) {
-            return index + Math.random();
-        },
-        createClones() {
-            const pages = this.$refs.pages.children;
-            const clonesElem = this.$refs.clones;
-
-            [...pages].forEach((page) => {
-                let clone;
-                const position = page.getBoundingClientRect();
-
-                clone = page.cloneNode(true);
-                clone.classList.add('page--cloned');
-
-                clone.style.cssText = `
-                    left: ${position.left}px;
-                    top: ${position.top}px;
-                    width: ${position.width}px
-                `;
-
-                clonesElem.appendChild(clone);
+        exportAll() {
+            this.pages.forEach((page) => {
+                page.checked = !this.allPagesSelected;
             });
+
+            this.allPagesSelected = !this.allPagesSelected;
+        },
+        selectPage(page, event) {
+            page.checked = event.$event.target.checked;
         },
     },
 }
 </script>
 
-
 <style>
     :root {
-        --pageBorder: 1px solid var(--mid-grey);
+        --border: 1px solid var(--mid-grey);
     }
 </style>
 
 <style scoped>
     /* Page manager */
-    .page-manager {}
-
-    .page-manager__header {
-        padding: var(--defaultSpacing);
+    .page-manager {
         background: var(--light-grey);
     }
 
-    .page-manager__list {
+    .page-manager__header {
+        border-bottom: var(--border);
+        padding: 12px var(--defaultSpacing);
+    }
 
+    .page-manager__footer {
+        display: flex;
+        justify-content: space-between;
+        border-top: var(--border);
+        border-bottom: var(--border);
+        background: var(--white);
+        padding: var(--defaultSpacing);
     }
 
     /* Page */
-
     .page {
-        display: flex;
-        flex-wrap: wrap;
+        position: relative;
         list-style: none;
         height: 122px;
         background: var(--white);
         padding: var(--defaultSpacing);
-        border-right: var(--pageBorder);
-        border-bottom: var(--pageBorder);
+        border-right: var(--border);
+        border-bottom: var(--border);
         width: calc(100% - 14px);
+        cursor: move;
+        transition: background 0.1s ease-in 25ms;
     }
 
-    .page.is-dragged {
-        visibility: visible;
-        position: absolute;
-        width: 232px;
-        height: 122px;
-        z-index: 100;
-        opacity: 1;
+    .page__inner {
+        display: flex;
+        flex-wrap: wrap;
     }
 
-    .page--cloned {
-        display: block;
-        position: absolute;
-        z-index: 1;
+    .page-manager .page:last-child {
+        border-bottom: none;
+    }
+
+    .page--ghost {
+        background: transparent;
+    }
+
+    .page--ghost .page__inner {
         visibility: hidden;
     }
 
-    .drag-marker {
-        position: relative;
-        height: 50px;
-        width: 5px;
-        border-left: 2px solid var(--green);
-        margin: 0 0 0.75rem 0;
-        z-index: 6;
+    .page--ghost:before {
+        content: '';
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        background: var(--green);
+        height: calc(100% - 32px);
+        width: 4px;
+    }
+
+    .page--drag {
+        opacity: 1 !important;
+        border: 1px dashed var(--green);
+        background: white;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+        border-radius: 2px;
+    }
+
+    .page--drag .page__box {
+        border: 1px solid var(--green);
     }
 
     .page .text {

@@ -1,8 +1,6 @@
 <template>
     <div class="document">
-        <div class="document__canvas">
-
-        </div>
+        <div class="document__canvas" />
     </div>
 </template>
 

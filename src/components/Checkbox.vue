@@ -4,6 +4,7 @@
             <input
                 type="checkbox"
                 name="checkbox"
+                :checked="checked"
                 @change="$emit('checked', { $event })"
             >
             <span class="checkbox__control">
@@ -31,6 +32,11 @@ export default {
             required: false,
             default: '',
         },
+        checked: {
+            type: Boolean,
+            required: false,
+            default: false,
+        }
     },
 }
 </script>

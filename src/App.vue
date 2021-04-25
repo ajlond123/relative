@@ -42,5 +42,6 @@ export default {
     grid-template-columns: 246px auto 246px;
     width: 100%;
     height: calc(100vh - var(--headerHeight));
+    overflow: hidden;
 }
 </style>
